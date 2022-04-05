@@ -77,7 +77,6 @@ thirdparty/
 *new-db/
 
 *.png
-*.html
 *~lock*
 media
 *permanent*

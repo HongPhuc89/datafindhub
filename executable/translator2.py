@@ -6,7 +6,7 @@ from selenium.common.exceptions import JavascriptException
 # local variables 
 from selenium.webdriver.chrome.options import Options as ChromeOptions 
 chrome_op = ChromeOptions() 
-#chrome_op.add_argument('--headless') 
+chrome_op.add_argument('--headless')
 browser = webdriver.Chrome(executable_path ='./chromedriver', options = chrome_op)
 
 
