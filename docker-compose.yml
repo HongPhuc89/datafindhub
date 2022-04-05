@@ -9,6 +9,8 @@ services:
       - data-find-network
     ports:
       - "8000:8000"
+    volumes:
+      - .:/murmuring
 
   redis:
     image: 'bitnami/redis:latest'
