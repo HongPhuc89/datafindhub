@@ -168,12 +168,14 @@ def upload_via_celery_home(self, name, file_name, cred_file):
     self.update_state(state='PROGRESS')
     cred_name = str(timezone.now())
     cred_name = re.sub('[\W_]+', '', "file_{}".format(cred_name)) + ".txt"
-    with open(settings.MEDIA_ROOT + "/uploaded/" + cred_name + ".txt", "w") as file:
+    uploaded_file_path = os.path.join(settings.MEDIA_ROOT,
+                                      'uploaded',
+                                      f"{cred_name}.txt")
+    with open(uploaded_file_path, "w") as file:
         file.write(cred_file)
-        file.close()
 
     gauth = GoogleAuth()
-    gauth.LoadCredentialsFile(settings.MEDIA_ROOT + "/uploaded/" + cred_name + ".txt")
+    gauth.LoadCredentialsFile(uploaded_file_path)
 
     # all_objects_dict = {"web_address":[],"original_text":[],"translated_text":[],"name":[],"hyperlink":[],"img":[],"link_to_image":[],"drive_link":[]}
     all_objects_dict = scrap_the_file(name, gauth, self)
