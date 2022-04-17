@@ -1,3 +1,4 @@
+from logging import getLogger
 from django.shortcuts import render, reverse, redirect
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.files.storage import FileSystemStorage
@@ -30,6 +31,7 @@ import os
 
 input_path = settings.MEDIA_ROOT + '/screenshots/full/'
 output_path = settings.MEDIA_ROOT + '/ocr/'
+logger = getLogger(__name__)
 
 gauth = GoogleAuth()
 
@@ -151,7 +153,12 @@ def get_table(request):
     if "image_data" in dict_:
         del dict_["image_data"]
 
+    logger.info(f"data: {dict_}")
+
+    print(dict_)
+
     df = pd.DataFrame(data=dict_)
+    df.rename(columns={'Translated Text': 'translated_text'}, inplace=True)
 
     data = json.dumps({"links": list(df["link_to_image"]), "drive_links": list(df["drive_link"])})
 
