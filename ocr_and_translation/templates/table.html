@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
@@ -12,7 +13,7 @@
             crossorigin="anonymous"></script>
     <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/sandstone/bootstrap.min.css'>
     <link rel="stylesheet" href="{% static '/ocr_and_translation/style.css' %}">
-    <script src="{% static 'ocr_and_translation/script.js' %}"></script>
+
     <script src='https://code.jquery.com/jquery-2.2.3.js'></script>
     <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js'></script>
     <script src='https://cdn.rawgit.com/julmot/mark.js/master/dist/jquery.mark.min.js'></script>
@@ -24,11 +25,12 @@
     <link rel="stylesheet" href="https://pwcappkit-static.azureedge.net/cdn/release/3.0.0/appkit.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<!--    <script src="{% static 'ocr_and_translation/script.js' %}"></script>-->
 </head>
 
 <body>
@@ -44,9 +46,7 @@
                         <label for="keyword">Keywords to be highlighted:</label>
                         <input type="text" class="form-control" value="Lorem" name="keyword" id="keyword">
                     </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default btn-sm" name="perform">Highlight keywords</button>
-                    </div>
+                    <button type="button" class="btn btn-primary btn-sm" name="perform">Highlight keywords</button>
                 </div>
                 <div class="col-xs-6">
                     <div class="form-group">
@@ -81,8 +81,6 @@
 <!-- partial -->
 
 
-</div>
-</div>
 <div class="container-xl px-2" style="color:#000000;font-family:'Calibri'">
 
     <a role="button" href="{{ csv_link }}" class="a-btn a-btn-primary a-btn-md w-8">Download Table in CSV format</a>
@@ -98,17 +96,18 @@
         </thead>
         <tbody>
         {% for index, row in table.iterrows %}
-        <tr>
+        <tr class="context">
             <td>{{ forloop.counter }}</td>
-            <td>{{ row.description }}</td>
-            <td>{{ row.translated_text }}</td>
             <td>
                 <a href="{{ row.Page }}" target="_blank">
                     {{ row.Page }}
                 </a>
 
             </td>
-            <td><a href = "{{row.drive_link}}">
+            <td>{{ row.description }}</td>
+            <td>{{ row.translated_text }}</td>
+
+            <td><a href="{{row.drive_link}}">
                 <img src="/media/screenshots/{{row.link_to_image}}">
             </a>
             </td>
@@ -119,5 +118,51 @@
     </table>
 </div>
 </body>
+<script>
+    $(function() {
+        var $context = $(".context");
+        var $form = $("form");
+        var $button = $form.find("button[name='perform']");
 
+        var mark = function() {
+
+            // Read the keyword
+            var searchTerm = $("input[name='keyword']").val();
+
+            // Determine selected options
+            var options = {};
+            var values = $form.serializeArray();
+            values = values.concat(
+            $form.find("input[type='checkbox']:not(:checked)").map(
+                function() {
+                return {
+                    "name": this.name,
+                    "value": "false"
+                }
+                }).get()
+            );
+            $.each(values, function(i, opt){
+            var key = opt.name;
+            var val = opt.value;
+            if(key === "keyword" || !val){
+                return;
+            }
+            if(val === "false"){
+                val = false;
+            } else if(val === "true"){
+                val = true;
+            }
+            options[key] = val;
+            });
+
+
+            var instance = new Mark($context);
+            instance.unmark();
+            instance.mark(searchTerm, options);
+        };
+
+        $button.on("click.perform", mark);
+   });
+
+</script>
 </html>

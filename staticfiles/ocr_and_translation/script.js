@@ -36,14 +36,14 @@ $(function() {
       options[key] = val;
     });
 
-    // Remove old highlights and highlight
-    // new search term afterwards
-    $context.unmark();
-    $context.mark(searchTerm, options);
+
+    console.log(searchTerm);
+    console.log(values);
+//    var context = document.querySelector(".context");
+//    var instance = new Mark(context);
+//    instance.mark(searchTerm, values);
+//
 
   });
   $button.trigger("click.perform");
 });
-
-
-$(".context").mark(["Lorem", "ipsum"]);

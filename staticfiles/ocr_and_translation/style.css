@@ -3,8 +3,12 @@
  * because it can be freely defined
  */
 .context :not(p) {
-  background: #f1c40f;
   padding: 0;
+}
+
+.context mark {
+  color:black;
+  background-color:yellow;
 }
 
 
@@ -12,7 +16,8 @@
  * The following is not related to the plugin
  */
 body {
-  background: #fbfcfc;
+  background: #f5f5f5 !important;
+  height: 100vh !important;
   width: 100%;
 }
 
@@ -37,5 +42,5 @@ body {
 }
 
 html {
-  width: 100%:
+  width: 100%;
 }
