@@ -12,7 +12,7 @@ from PIL import Image
 from bs4 import BeautifulSoup
 from django.conf import settings
 from django.utils import timezone
-from google_trans_new import google_translator as Translator
+from .google_trans_new import google_translator as Translator
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
 import pydrive2
@@ -196,7 +196,6 @@ class scraper:
         #     thr.start()
 
         original = main(f"{self.full}/{full_name}")
-
         translator = Translator()
         translated = translator.translate(original) if original is not None else " "
 
