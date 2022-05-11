@@ -14,10 +14,10 @@ RUN apt-get update \
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
     && dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
 
-COPY . murmuring/
-WORKDIR murmuring
+WORKDIR /usr/src/app
+RUN chmod +x /usr/src/app
+COPY . /usr/src/app
 
 RUN pip install -r requirements.txt
-RUN chmod +x murmuring
 RUN chmod +x entrypoint.sh
 CMD [ "/bin/sh", "entrypoint.sh"]
