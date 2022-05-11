@@ -18,6 +18,6 @@ COPY . murmuring/
 WORKDIR murmuring
 
 RUN pip install -r requirements.txt
-
+RUN chmod +x murmuring
 RUN chmod +x entrypoint.sh
-ENTRYPOINT ./entrypoint.sh
+CMD [ "/bin/sh", "entrypoint.sh"]
