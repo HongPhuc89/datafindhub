@@ -85,11 +85,10 @@ class scraper:
                             self.history.append(scrapedUrl)
                             self.history.append(scrapedUrl + "/")
                             self.history.append(scrapedUrl + "#")
-
                             self.start(scrapedUrl, gauth, task, pr, a, name_of_folder)
             return self.url_dict
-        except WebDriverException:
-            print(f"Failed processing:{'url'}")
+        except WebDriverException as e:
+            print(f"Failed processing:{url}, error={e}")
 
     def parseUrls(self, limit=8):
         urls = BeautifulSoup(self.driver.page_source, "html5lib").findAll('a', href=True)
